@@ -554,6 +554,7 @@
   <div class="nav-tabs">
     <button class="nav-tab active" data-target="full-time">Full-Time</button>
     <button class="nav-tab" data-target="part-time">Part-Time</button>
+    <button class="nav-tab" data-target="deled-2018">D.El.Ed 2018</button>
   </div>
 </nav>
 
@@ -565,6 +566,7 @@
     <div class="stat-pill"><div class="num">13</div><div class="lbl">Faculty Members</div></div>
     <div class="stat-pill"><div class="num">10</div><div class="lbl">Full&#8209;Time Staff</div></div>
     <div class="stat-pill"><div class="num">3</div><div class="lbl">Part&#8209;Time Staff</div></div>
+    <div class="stat-pill"><div class="num">69</div><div class="lbl">D.El.Ed 2018</div></div>
   </div>
   <div class="scroll-cue"><span>Scroll</span><div class="line"></div></div>
 </section>
@@ -584,6 +586,14 @@
       <span class="section-count">3 Members</span>
     </div>
     <div class="staff-grid" id="grid-part-time"></div>
+  </div>
+
+  <div class="section" id="section-deled-2018">
+    <div class="section-head">
+      <h2 class="section-title">D.El.Ed Batch 2018</h2>
+      <span class="section-count">69 Students</span>
+    </div>
+    <div class="staff-grid" id="grid-deled-2018"></div>
   </div>
 </main>
 
@@ -620,6 +630,103 @@ const staff = {
     { sn:3, name:"Dr. Ruby Sharma", gender:"D/o", father:"Sh. Amlesh Sharma", dob:"06-Jul-1994", aadhar:"4912 5635 8563", category:"General", designation:"Asst. Prof.", subject:"Counsellor", plus2:61, grad:"B.A. 64", postGrad:"M.A. 65", profI:"B.Ed. 68", profII:"M.Ed. 77", net:"Ph.D \u2013 Education (Jain Vishva Bharti Institute, Ladnun) \u00b7 PG Diploma (Career Guidance and Counselling)", experience:"\u2014", initials:"RS" }
   ]
 };
+
+const deled2018 = [
+  { sn:1, name:"ADITI SAXENA", father:"ABDESH SAXENA" },
+  { sn:2, name:"AFREEN NAZ", father:"MOHAMMAD AKIL" },
+  { sn:3, name:"AIMAN PARVEZ", father:"MR.PARVEZ AHMED" },
+  { sn:4, name:"AKANCHHI GUPTA", father:"SUSHEEL KUMAR GUPTA" },
+  { sn:5, name:"AKANSHA VESHADAV", father:"YASHPAL VESHADAV" },
+  { sn:6, name:"ANJU SINGH", father:"CHANDAN SINGH" },
+  { sn:7, name:"ARCHANA PAL", father:"MR.CHATURBHUJ SINGH" },
+  { sn:8, name:"AREFEEN JAHAN", father:"TOUHEED" },
+  { sn:9, name:"AYESHA BI", father:"MOHD. UMAR" },
+  { sn:10, name:"BEENA YADAV", father:"HARI BABU YADAV" },
+  { sn:11, name:"CHANCHAL GANGWAR", father:"PREMNARAIN" },
+  { sn:12, name:"DEEKSHA", father:"RAJVIR SINGH" },
+  { sn:13, name:"DEEPIKA GUPTA", father:"RAJENDRA KUMAR GUPTA" },
+  { sn:14, name:"DOLLY BHATNAGAR", father:"RAMESH CHANDRA BHATNAGAR" },
+  { sn:15, name:"GARGEE VESHADAV", father:"VEDPRAKASH" },
+  { sn:16, name:"HEMA RAWAT", father:"LATE MR MOHAN SINGH" },
+  { sn:17, name:"HIMANSHI", father:"NEERAJ KUMAR" },
+  { sn:18, name:"JYOTI KUMARI", father:"TEJPAL SINGH" },
+  { sn:19, name:"KAUSHIKI VARSHNEY", father:"GAURAV VARSHNEY" },
+  { sn:20, name:"KHUSHBOO SHARMA", father:"SANTOSH KUMAR" },
+  { sn:21, name:"MANSI JAISWAL", father:"SANJEEV JAISWAL" },
+  { sn:22, name:"MANSI SHARMA", father:"SUNIL KUMAR SHARMA" },
+  { sn:23, name:"MANSI SRIVASTAV", father:"BRAHMA AVTAR SRIVASTAV" },
+  { sn:24, name:"MOHINI PARASHARI", father:"RAJESH KUMAR SHARMA" },
+  { sn:25, name:"MONA YADAV", father:"HARI BABU" },
+  { sn:26, name:"MONIKA KASHYAP", father:"KAMAL BABU" },
+  { sn:27, name:"MONIKA SHARMA", father:"SANTOSH SHARMA" },
+  { sn:28, name:"MONIKA SINGH", father:"SURESH KUMAR" },
+  { sn:29, name:"NAINSI GUPTA", father:"AJAY KUMAR GUPTA" },
+  { sn:30, name:"NEELAM YADAV", father:"MOHER SINGH YADAV" },
+  { sn:31, name:"NEETU GANGWAR", father:"ASHOK KUMAR GANGWAR" },
+  { sn:32, name:"NEHA", father:"MAHESH CHANDRA SHARMA" },
+  { sn:33, name:"NEHA KHANAM", father:"ASHFAK HUSAIN" },
+  { sn:34, name:"NISHTHA SHARMA", father:"RAJENDRA KUMAR SHARMA" },
+  { sn:35, name:"PALLAVI SHARMA", father:"RAJENDRA KUMAR SHARMA" },
+  { sn:36, name:"PARUL", father:"SUNEEL KUMAR" },
+  { sn:37, name:"PINKE SAGAR", father:"RAMESH CHANDRA" },
+  { sn:38, name:"POOJA DEVI", father:"SHIVCHARAN LAL" },
+  { sn:39, name:"POOJA SAINI", father:"DHARAMPAL" },
+  { sn:40, name:"PRACHI VARSHNEY", father:"LALIT KUMAR INNA" },
+  { sn:41, name:"PREETI YADAV", father:"SHRI RISHIPAL YADAV" },
+  { sn:42, name:"PRIYANKA DEVI", father:"PREMPAL" },
+  { sn:43, name:"PUJA KATARIYA", father:"HARISH KATARIYA" },
+  { sn:44, name:"RAJ KUMARI", father:"PREM SHANKAR" },
+  { sn:45, name:"RAJNI", father:"DEVENDRA SINGH" },
+  { sn:46, name:"REKHA DEVI", father:"DEV DATT" },
+  { sn:47, name:"RICHA KUMARI", father:"SHISHUPAL SINGH" },
+  { sn:48, name:"ROOMA DEVI", father:"SHRIRAM GANGWAR" },
+  { sn:49, name:"RUKHSAR", father:"AFSAR" },
+  { sn:50, name:"SAKSHI RAGHAV", father:"JAYDEEP RAGHAV" },
+  { sn:51, name:"SAVIYA", father:"ISRAR HUSSAIN" },
+  { sn:52, name:"SEEMA", father:"MANOHAR LAL" },
+  { sn:53, name:"SHAHNAJ", father:"SHAREEF" },
+  { sn:54, name:"SHANE JAHAN", father:"KHURSHEED AHMED" },
+  { sn:55, name:"SHILPA RANI", father:"SURAJ KUMAR" },
+  { sn:56, name:"SHIVANI VERMA", father:"MANOJ KUMAR VERMA" },
+  { sn:57, name:"SHIWANGI BHARDWAJ", father:"SANJEEV KUMAR SHARMA" },
+  { sn:58, name:"SUNITA KUMARI", father:"RAMSARUP" },
+  { sn:59, name:"SUPRIYA SHARMA", father:"ANIL KUMAR SHARMA" },
+  { sn:60, name:"SUSHMA YADAV", father:"RAM BHAROSEY LAL" },
+  { sn:61, name:"SUSHMA DEVI", father:"SHRI PYARE LAL" },
+  { sn:62, name:"SWATI", father:"RAJVIR SINGH" },
+  { sn:63, name:"SWETA SHARMA", father:"UMESH KUMAR SHARMA" },
+  { sn:64, name:"TASKEEN FATMA", father:"IBNE ABBAS" },
+  { sn:65, name:"TEHBA KHAN", father:"HAMID KHAN" },
+  { sn:66, name:"USHA ARYA", father:"RAM KUMAR SINGH" },
+  { sn:67, name:"VIDUSHI VARSHNEY", father:"HARINANDAN" },
+  { sn:68, name:"VIJAY BHARTI", father:"CHUNNI LAL" },
+  { sn:69, name:"ZEENAT FATIMA", father:"BABU HUSAIN" }
+];
+
+function getInitials(name){
+  return name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
+}
+
+function buildStudentCard(person){
+  const card = document.createElement('div');
+  card.className = 'staff-card';
+  card.innerHTML = `
+    <div class="card-photo">
+      <div class="avatar-initials">${getInitials(person.name)}</div>
+      <span class="designation-badge">S.No. ${person.sn}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${person.name}</div>
+      <div class="card-subject">D.El.Ed Batch 2018</div>
+      <div class="card-dob">Father: ${person.father}</div>
+    </div>
+    <div class="card-footer">
+      <span></span>
+      <span class="view-hint">Student</span>
+    </div>
+  `;
+  return card;
+}
 
 function getTag(net){
   if(!net || net === '\u2014') return '';
@@ -666,6 +773,8 @@ function renderGrids(){
   const ptGrid = document.getElementById('grid-part-time');
   staff.fullTime.forEach(p => ftGrid.appendChild(buildCard(p)));
   staff.partTime.forEach(p => ptGrid.appendChild(buildCard(p)));
+  const dlGrid = document.getElementById('grid-deled-2018');
+  deled2018.forEach(p => dlGrid.appendChild(buildStudentCard(p)));
 }
 
 function mark(val){
@@ -746,7 +855,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModalDir
 const navTabs = document.querySelectorAll('.nav-tab');
 const sections = {
   'full-time': document.getElementById('section-full-time'),
-  'part-time': document.getElementById('section-part-time')
+  'part-time': document.getElementById('section-part-time'),
+  'deled-2018': document.getElementById('section-deled-2018')
 };
 navTabs.forEach(tab => {
   tab.addEventListener('click', () => {
