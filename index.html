@@ -534,6 +534,34 @@
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   }
 
+  /* ── TEST PAGE ── */
+  .test-page{
+    min-height:60vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:18px;
+  }
+  .test-page h2{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2rem,6vw,3.2rem);
+    font-weight:800;
+  }
+  .test-page p{color:var(--ink-mute);max-width:480px;}
+  .test-btn{
+    margin-top:10px;
+    padding:14px 34px;
+    border-radius:100px;
+    border:1px solid var(--glass-border);
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff;font-weight:700;font-size:14px;
+    cursor:pointer;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .test-btn:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(46,91,255,0.35);}
+
   @media (max-width:520px){
     .nav-tabs{display:none;}
     .modal-header{flex-direction:column;gap:18px;}
@@ -552,9 +580,40 @@
 <nav class="nav" id="nav">
   <div class="nav-logo"><span class="mark">O</span>OBSCURA {?}</div>
   <div class="nav-tabs">
+    <!--
+      ====================================================================
+      HOW TO ADD A NEW CATEGORY (NAV TAB + SECTION)
+      ====================================================================
+      To add a new category (e.g. "Library Staff"), you need 3 things:
+
+      1) A new button here in .nav-tabs:
+         <button class="nav-tab" data-target="library-staff">Library</button>
+         - "data-target" must match the section id below (without "section-")
+
+      2) A new <section> block down in <main> (copy the pattern of
+         full-time/part-time sections):
+         <div class="section" id="section-library-staff">
+           <div class="section-head">
+             <h2 class="section-title">Library Staff</h2>
+             <span class="section-count">N Members</span>
+           </div>
+           <div class="staff-grid" id="grid-library-staff"></div>
+         </div>
+
+      3) In the <script> below:
+         a) Add a new array of people, e.g. staff.library = [ {...}, {...} ]
+         b) Register it in renderGrids():
+            staff.library.forEach(p => document.getElementById('grid-library-staff').appendChild(buildCard(p)));
+         c) Register the new section + tab in the "sections" object so
+            scroll-spy & nav highlighting work:
+            'library-staff': document.getElementById('section-library-staff')
+
+      That's it — same UI/animations apply automatically.
+      ====================================================================
+    -->
     <button class="nav-tab active" data-target="full-time">Full-Time</button>
     <button class="nav-tab" data-target="part-time">Part-Time</button>
-    <button class="nav-tab" data-target="deled-2018">D.El.Ed 2018</button>
+    <button class="nav-tab" data-target="cyber">cyber</button>
   </div>
 </nav>
 
@@ -566,7 +625,6 @@
     <div class="stat-pill"><div class="num">13</div><div class="lbl">Faculty Members</div></div>
     <div class="stat-pill"><div class="num">10</div><div class="lbl">Full&#8209;Time Staff</div></div>
     <div class="stat-pill"><div class="num">3</div><div class="lbl">Part&#8209;Time Staff</div></div>
-    <div class="stat-pill"><div class="num">69</div><div class="lbl">D.El.Ed 2018</div></div>
   </div>
   <div class="scroll-cue"><span>Scroll</span><div class="line"></div></div>
 </section>
@@ -588,18 +646,28 @@
     <div class="staff-grid" id="grid-part-time"></div>
   </div>
 
-  <div class="section" id="section-deled-2018">
-    <div class="section-head">
-      <h2 class="section-title">D.El.Ed Batch 2018</h2>
-      <span class="section-count">69 Students</span>
+  <!--
+    ====================================================================
+    TEST SECTION
+    ====================================================================
+    This replaces the old "D.El.Ed Batch 2018" section.
+    The "Test" nav button scrolls here. The button below currently
+    just shows an alert as a placeholder — replace its onclick with
+    your real test logic (e.g. window.location.href = 'test.html',
+    or open a modal, or start a quiz function).
+    ====================================================================
+  -->
+  <div class="section" id="section-cyber">
+    <div class="cyber">
+      <h2>HEAR YOU CAN LEARN TO HACK TMU WEBSITE FOR FREE</h2>
+       <button class="test-btn" onclick="startTest()">TRY</button>
     </div>
-    <div class="staff-grid" id="grid-deled-2018"></div>
   </div>
 </main>
 
 <footer class="footer">
-  <div class="mark-text">OBSCURA {?}</div>
-  Plot No. 101 Min., Street No. SEZ Road, Village&ndash;Bakenia, Moradabad &ndash; 244001, U.P.
+  <div class="mark-text">BY OBSCURA {?}</div>
+    on processing
 </footer>
 
 <div class="modal-overlay" id="modalOverlay">
@@ -611,121 +679,58 @@
 </div>
 
 <script>
+/*
+  ====================================================================
+  DATA STRUCTURE
+  ====================================================================
+  staff.fullTime / staff.partTime are arrays of person objects.
+  NOTE: "category" field has been removed from the UI (no badge shown
+  in modal anymore), but it's kept in the data here harmlessly — you
+  can delete it from objects if you want, it's unused now.
+
+  TO ADD A NEW PERSON to an existing category: just copy an object
+  inside the array and edit its fields.
+
+  TO ADD A WHOLE NEW CATEGORY: see the big comment block near the
+  nav-tabs above for the 3-step process (button, section, script).
+  ====================================================================
+*/
 const staff = {
   fullTime: [
-    { sn:1, name:"Dr. Vinod Kumar Jain", gender:"S/o", father:"Sh. Prakash Chand Jain", dob:"09-Feb-1982", aadhar:"3943 0915 7431", category:"General", designation:"Principal", subject:"Educational Studies", plus2:49, grad:"B.A. 52", postGrad:"M.A. (HIS.) 59", profI:"B.Ed. 69", profII:"M.Ed. 64", net:"Ph.D \u2013 Education (Jain Vishva Bharti Institute, Ladnun)", experience:"12 years", initials:"VKJ" },
-    { sn:2, name:"Dr. Harsh Vardhan", gender:"S/o", father:"Sh. Devraj Singh", dob:"08-May-1974", aadhar:"4002 3741 5881", category:"OBC", designation:"Asst. Prof.", subject:"Maths", plus2:60, grad:"B.Sc. 55", postGrad:"M.A. (Mathematics) 61", profI:"B.Ed. 54", profII:"\u2014", net:"Ph.D \u2013 Mathematics (MJPRU, Bareilly)", experience:"\u2014", initials:"HV" },
-    { sn:3, name:"Dr. Nikhil Rastogi", gender:"S/o", father:"Sh. Gyan Chand Rastogi", dob:"01-Jul-1975", aadhar:"5446 8811 1737", category:"General", designation:"Asst. Prof.", subject:"Physics", plus2:63, grad:"B.Sc. (Phy. & Chem.) 71", postGrad:"M.Sc. (Physics) 61", profI:"B.Ed. 54", profII:"\u2014", net:"Ph.D \u2013 Physics (MJPRU, Bareilly)", experience:"\u2014", initials:"NR" },
-    { sn:4, name:"Dr. Seema Maan", gender:"D/o", father:"Sh. Rajveer Singh Maan", dob:"07-May-1981", aadhar:"4063 7063 1240", category:"OBC", designation:"Asst. Prof.", subject:"Chemistry", plus2:56, grad:"B.Sc. 66", postGrad:"M.Sc. (Chemistry) 68", profI:"B.Ed. 76", profII:"\u2014", net:"Ph.D \u2013 Chemistry (CCSU, Meerut)", experience:"\u2014", initials:"SM" },
-    { sn:5, name:"Dr. Naheed Bi", gender:"D/o", father:"Sh. Gore Mian", dob:"25-Jan-1980", aadhar:"8145 1119 8088", category:"General", designation:"Asst. Prof.", subject:"Zoology", plus2:46, grad:"B.Sc. (Zool. & Chem.) 55", postGrad:"M.Sc. (Zoology) 67", profI:"B.Ed. 72", profII:"M.Ed. 79", net:"UGC-NET (Education) \u00b7 Ph.D \u2013 Education (MJPRU, Bareilly)", experience:"\u2014", initials:"NB" },
-    { sn:6, name:"Mr. Ratnesh Jain", gender:"S/o", father:"Sh. Sanat Kumar Jain", dob:"07-Jan-1979", aadhar:"3031 4315 5410", category:"General", designation:"Asst. Prof.", subject:"Botany", plus2:54, grad:"B.Sc. (Chem., Bot. & Zoology) 50", postGrad:"M.Sc. (Botany) 52", profI:"B.Ed. 76", profII:"M.Ed. 70", net:"UGC-NET (Education)", experience:"\u2014", initials:"RJ" },
-    { sn:7, name:"Dr. Indu Tripathi", gender:"D/o", father:"Sh. Virender Kumar Tripathi", dob:"18-Oct-1978", aadhar:"9383 7822 4520", category:"General", designation:"Asst. Prof.", subject:"Communicative Skills in English", plus2:55, grad:"B.A. 54", postGrad:"M.A. (English) 54", profI:"B.Ed. 70", profII:"M.Ed. 68", net:"Ph.D \u2013 Education (Teerthanker Mahaveer University)", experience:"\u2014", initials:"IT" },
-    { sn:8, name:"Dr. Shivani Yadav", gender:"D/o", father:"Sh. Krishna Kumar Yadav", dob:"10-Aug-1981", aadhar:"5374 7724 7480", category:"OBC", designation:"Asst. Prof.", subject:"Communicative Skills in English", plus2:51, grad:"B.A. 47", postGrad:"M.A. (English) 49", profI:"B.Ed. 70", profII:"M.Ed. 72", net:"Ph.D \u2013 Education (Hemwati Nandan Bahuguna Garhwal Vishwavidyalaya)", experience:"\u2014", initials:"SY" },
-    { sn:9, name:"Dr. Pawas Kumar Mandal", gender:"S/o", father:"Sh. Shreekant Mandal", dob:"02-Mar-1989", aadhar:"4668 8523 8900", category:"General", designation:"Asst. Prof.", subject:"Educational Studies", plus2:59, grad:"BCA 63", postGrad:"M.A. (Philosophy) 72", profI:"B.Ed. 77", profII:"M.Ed. 71", net:"Ph.D \u2013 Education (Mahatma Gandhi Anttarashtriya Hindu Vishwavidyalaya, Wardha)", experience:"\u2014", initials:"PKM" },
-    { sn:10, name:"Dr. Ranjeet Singh", gender:"S/o", father:"Sh. Ram Murti Singh", dob:"03-Nov-1980", aadhar:"2038 9088 0068", category:"OBC", designation:"Asst. Prof.", subject:"Educational Studies", plus2:54, grad:"B.Sc. 47", postGrad:"M.A. (Economics) 59", profI:"B.Ed. 65", profII:"M.Ed. 77", net:"Ph.D \u2013 Education (Jain Vishva Bharti Institute, Ladnun)", experience:"\u2014", initials:"RS" }
+    { sn:1, name:"Dr. Vinod Kumar Jain", gender:"S/o", father:"Sh. Prakash Chand Jain", dob:"09-Feb-1982", aadhar:"3943 0915 7431", designation:"Principal", subject:"Educational Studies", plus2:49, grad:"B.A. 52", postGrad:"M.A. (HIS.) 59", profI:"B.Ed. 69", profII:"M.Ed. 64", net:"Ph.D \u2013 Education (Jain Vishva Bharti Institute, Ladnun)", experience:"12 years", initials:"VKJ" },
+    { sn:2, name:"Dr. Harsh Vardhan", gender:"S/o", father:"Sh. Devraj Singh", dob:"08-May-1974", aadhar:"4002 3741 5881", designation:"Asst. Prof.", subject:"Maths", plus2:60, grad:"B.Sc. 55", postGrad:"M.A. (Mathematics) 61", profI:"B.Ed. 54", profII:"\u2014", net:"Ph.D \u2013 Mathematics (MJPRU, Bareilly)", experience:"\u2014", initials:"HV" },
+    { sn:3, name:"Dr. Nikhil Rastogi", gender:"S/o", father:"Sh. Gyan Chand Rastogi", dob:"01-Jul-1975", aadhar:"5446 8811 1737", designation:"Asst. Prof.", subject:"Physics", plus2:63, grad:"B.Sc. (Phy. & Chem.) 71", postGrad:"M.Sc. (Physics) 61", profI:"B.Ed. 54", profII:"\u2014", net:"Ph.D \u2013 Physics (MJPRU, Bareilly)", experience:"\u2014", initials:"NR" },
+    { sn:4, name:"Dr. Seema Maan", gender:"D/o", father:"Sh. Rajveer Singh Maan", dob:"07-May-1981", aadhar:"4063 7063 1240", designation:"Asst. Prof.", subject:"Chemistry", plus2:56, grad:"B.Sc. 66", postGrad:"M.Sc. (Chemistry) 68", profI:"B.Ed. 76", profII:"\u2014", net:"Ph.D \u2013 Chemistry (CCSU, Meerut)", experience:"\u2014", initials:"SM" },
+    { sn:5, name:"Dr. Naheed Bi", gender:"D/o", father:"Sh. Gore Mian", dob:"25-Jan-1980", aadhar:"8145 1119 8088", designation:"Asst. Prof.", subject:"Zoology", plus2:46, grad:"B.Sc. (Zool. & Chem.) 55", postGrad:"M.Sc. (Zoology) 67", profI:"B.Ed. 72", profII:"M.Ed. 79", net:"UGC-NET (Education) \u00b7 Ph.D \u2013 Education (MJPRU, Bareilly)", experience:"\u2014", initials:"NB" },
+    { sn:6, name:"Mr. Ratnesh Jain", gender:"S/o", father:"Sh. Sanat Kumar Jain", dob:"07-Jan-1979", aadhar:"3031 4315 5410", designation:"Asst. Prof.", subject:"Botany", plus2:54, grad:"B.Sc. (Chem., Bot. & Zoology) 50", postGrad:"M.Sc. (Botany) 52", profI:"B.Ed. 76", profII:"M.Ed. 70", net:"UGC-NET (Education)", experience:"\u2014", initials:"RJ" },
+    { sn:7, name:"Dr. Indu Tripathi", gender:"D/o", father:"Sh. Virender Kumar Tripathi", dob:"18-Oct-1978", aadhar:"9383 7822 4520", designation:"Asst. Prof.", subject:"Communicative Skills in English", plus2:55, grad:"B.A. 54", postGrad:"M.A. (English) 54", profI:"B.Ed. 70", profII:"M.Ed. 68", net:"Ph.D \u2013 Education (Teerthanker Mahaveer University)", experience:"\u2014", initials:"IT" },
+    { sn:8, name:"Dr. Shivani Yadav", gender:"D/o", father:"Sh. Krishna Kumar Yadav", dob:"10-Aug-1981", aadhar:"5374 7724 7480", designation:"Asst. Prof.", subject:"Communicative Skills in English", plus2:51, grad:"B.A. 47", postGrad:"M.A. (English) 49", profI:"B.Ed. 70", profII:"M.Ed. 72", net:"Ph.D \u2013 Education (Hemwati Nandan Bahuguna Garhwal Vishwavidyalaya)", experience:"\u2014", initials:"SY" },
+    { sn:9, name:"Dr. Pawas Kumar Mandal", gender:"S/o", father:"Sh. Shreekant Mandal", dob:"02-Mar-1989", aadhar:"4668 8523 8900", designation:"Asst. Prof.", subject:"Educational Studies", plus2:59, grad:"BCA 63", postGrad:"M.A. (Philosophy) 72", profI:"B.Ed. 77", profII:"M.Ed. 71", net:"Ph.D \u2013 Education (Mahatma Gandhi Anttarashtriya Hindu Vishwavidyalaya, Wardha)", experience:"\u2014", initials:"PKM" },
+    { sn:10, name:"Dr. Ranjeet Singh", gender:"S/o", father:"Sh. Ram Murti Singh", dob:"03-Nov-1980", aadhar:"2038 9088 0068", designation:"Asst. Prof.", subject:"Educational Studies", plus2:54, grad:"B.Sc. 47", postGrad:"M.A. (Economics) 59", profI:"B.Ed. 65", profII:"M.Ed. 77", net:"Ph.D \u2013 Education (Jain Vishva Bharti Institute, Ladnun)", experience:"\u2014", initials:"RS" }
   ],
   partTime: [
-    { sn:1, name:"Mr. Touheed Akhtar", gender:"S/o", father:"Mohd. Zareef", dob:"03-Aug-1981", aadhar:"8145 5899 2253", category:"General", designation:"Asst. Prof.", subject:"Physical Education", plus2:56, grad:"B.A. 55", postGrad:"\u2014", profI:"B.P.Ed. 63", profII:"M.P.Ed. 61", net:"M.Phil (APS University, Rewa)", experience:"\u2014", initials:"TA" },
-    { sn:2, name:"Mr. Pravesh Chandra Verma", gender:"S/o", father:"Sh. Surendra Nath Verma", dob:"03-Jun-1986", aadhar:"5617 0241 0350", category:"OBC", designation:"Asst. Prof.", subject:"Fine Arts", plus2:63, grad:"BFA 67", postGrad:"MVA 70", profI:"\u2014", profII:"\u2014", net:"\u2014", experience:"\u2014", initials:"PCV" },
-    { sn:3, name:"Dr. Ruby Sharma", gender:"D/o", father:"Sh. Amlesh Sharma", dob:"06-Jul-1994", aadhar:"4912 5635 8563", category:"General", designation:"Asst. Prof.", subject:"Counsellor", plus2:61, grad:"B.A. 64", postGrad:"M.A. 65", profI:"B.Ed. 68", profII:"M.Ed. 77", net:"Ph.D \u2013 Education (Jain Vishva Bharti Institute, Ladnun) \u00b7 PG Diploma (Career Guidance and Counselling)", experience:"\u2014", initials:"RS" }
+    { sn:1, name:"Mr. Touheed Akhtar", gender:"S/o", father:"Mohd. Zareef", dob:"03-Aug-1981", aadhar:"8145 5899 2253", designation:"Asst. Prof.", subject:"Physical Education", plus2:56, grad:"B.A. 55", postGrad:"\u2014", profI:"B.P.Ed. 63", profII:"M.P.Ed. 61", net:"M.Phil (APS University, Rewa)", experience:"\u2014", initials:"TA" },
+    { sn:2, name:"Mr. Pravesh Chandra Verma", gender:"S/o", father:"Sh. Surendra Nath Verma", dob:"03-Jun-1986", aadhar:"5617 0241 0350", designation:"Asst. Prof.", subject:"Fine Arts", plus2:63, grad:"BFA 67", postGrad:"MVA 70", profI:"\u2014", profII:"\u2014", net:"\u2014", experience:"\u2014", initials:"PCV" },
+    { sn:3, name:"Dr. Ruby Sharma", gender:"D/o", father:"Sh. Amlesh Sharma", dob:"06-Jul-1994", aadhar:"4912 5635 8563", designation:"Asst. Prof.", subject:"Counsellor", plus2:61, grad:"B.A. 64", postGrad:"M.A. 65", profI:"B.Ed. 68", profII:"M.Ed. 77", net:"Ph.D \u2013 Education (Jain Vishva Bharti Institute, Ladnun) \u00b7 PG Diploma (Career Guidance and Counselling)", experience:"\u2014", initials:"RS" }
   ]
-};
 
-const deled2018 = [
-  { sn:1, name:"ADITI SAXENA", father:"ABDESH SAXENA" },
-  { sn:2, name:"AFREEN NAZ", father:"MOHAMMAD AKIL" },
-  { sn:3, name:"AIMAN PARVEZ", father:"MR.PARVEZ AHMED" },
-  { sn:4, name:"AKANCHHI GUPTA", father:"SUSHEEL KUMAR GUPTA" },
-  { sn:5, name:"AKANSHA VESHADAV", father:"YASHPAL VESHADAV" },
-  { sn:6, name:"ANJU SINGH", father:"CHANDAN SINGH" },
-  { sn:7, name:"ARCHANA PAL", father:"MR.CHATURBHUJ SINGH" },
-  { sn:8, name:"AREFEEN JAHAN", father:"TOUHEED" },
-  { sn:9, name:"AYESHA BI", father:"MOHD. UMAR" },
-  { sn:10, name:"BEENA YADAV", father:"HARI BABU YADAV" },
-  { sn:11, name:"CHANCHAL GANGWAR", father:"PREMNARAIN" },
-  { sn:12, name:"DEEKSHA", father:"RAJVIR SINGH" },
-  { sn:13, name:"DEEPIKA GUPTA", father:"RAJENDRA KUMAR GUPTA" },
-  { sn:14, name:"DOLLY BHATNAGAR", father:"RAMESH CHANDRA BHATNAGAR" },
-  { sn:15, name:"GARGEE VESHADAV", father:"VEDPRAKASH" },
-  { sn:16, name:"HEMA RAWAT", father:"LATE MR MOHAN SINGH" },
-  { sn:17, name:"HIMANSHI", father:"NEERAJ KUMAR" },
-  { sn:18, name:"JYOTI KUMARI", father:"TEJPAL SINGH" },
-  { sn:19, name:"KAUSHIKI VARSHNEY", father:"GAURAV VARSHNEY" },
-  { sn:20, name:"KHUSHBOO SHARMA", father:"SANTOSH KUMAR" },
-  { sn:21, name:"MANSI JAISWAL", father:"SANJEEV JAISWAL" },
-  { sn:22, name:"MANSI SHARMA", father:"SUNIL KUMAR SHARMA" },
-  { sn:23, name:"MANSI SRIVASTAV", father:"BRAHMA AVTAR SRIVASTAV" },
-  { sn:24, name:"MOHINI PARASHARI", father:"RAJESH KUMAR SHARMA" },
-  { sn:25, name:"MONA YADAV", father:"HARI BABU" },
-  { sn:26, name:"MONIKA KASHYAP", father:"KAMAL BABU" },
-  { sn:27, name:"MONIKA SHARMA", father:"SANTOSH SHARMA" },
-  { sn:28, name:"MONIKA SINGH", father:"SURESH KUMAR" },
-  { sn:29, name:"NAINSI GUPTA", father:"AJAY KUMAR GUPTA" },
-  { sn:30, name:"NEELAM YADAV", father:"MOHER SINGH YADAV" },
-  { sn:31, name:"NEETU GANGWAR", father:"ASHOK KUMAR GANGWAR" },
-  { sn:32, name:"NEHA", father:"MAHESH CHANDRA SHARMA" },
-  { sn:33, name:"NEHA KHANAM", father:"ASHFAK HUSAIN" },
-  { sn:34, name:"NISHTHA SHARMA", father:"RAJENDRA KUMAR SHARMA" },
-  { sn:35, name:"PALLAVI SHARMA", father:"RAJENDRA KUMAR SHARMA" },
-  { sn:36, name:"PARUL", father:"SUNEEL KUMAR" },
-  { sn:37, name:"PINKE SAGAR", father:"RAMESH CHANDRA" },
-  { sn:38, name:"POOJA DEVI", father:"SHIVCHARAN LAL" },
-  { sn:39, name:"POOJA SAINI", father:"DHARAMPAL" },
-  { sn:40, name:"PRACHI VARSHNEY", father:"LALIT KUMAR INNA" },
-  { sn:41, name:"PREETI YADAV", father:"SHRI RISHIPAL YADAV" },
-  { sn:42, name:"PRIYANKA DEVI", father:"PREMPAL" },
-  { sn:43, name:"PUJA KATARIYA", father:"HARISH KATARIYA" },
-  { sn:44, name:"RAJ KUMARI", father:"PREM SHANKAR" },
-  { sn:45, name:"RAJNI", father:"DEVENDRA SINGH" },
-  { sn:46, name:"REKHA DEVI", father:"DEV DATT" },
-  { sn:47, name:"RICHA KUMARI", father:"SHISHUPAL SINGH" },
-  { sn:48, name:"ROOMA DEVI", father:"SHRIRAM GANGWAR" },
-  { sn:49, name:"RUKHSAR", father:"AFSAR" },
-  { sn:50, name:"SAKSHI RAGHAV", father:"JAYDEEP RAGHAV" },
-  { sn:51, name:"SAVIYA", father:"ISRAR HUSSAIN" },
-  { sn:52, name:"SEEMA", father:"MANOHAR LAL" },
-  { sn:53, name:"SHAHNAJ", father:"SHAREEF" },
-  { sn:54, name:"SHANE JAHAN", father:"KHURSHEED AHMED" },
-  { sn:55, name:"SHILPA RANI", father:"SURAJ KUMAR" },
-  { sn:56, name:"SHIVANI VERMA", father:"MANOJ KUMAR VERMA" },
-  { sn:57, name:"SHIWANGI BHARDWAJ", father:"SANJEEV KUMAR SHARMA" },
-  { sn:58, name:"SUNITA KUMARI", father:"RAMSARUP" },
-  { sn:59, name:"SUPRIYA SHARMA", father:"ANIL KUMAR SHARMA" },
-  { sn:60, name:"SUSHMA YADAV", father:"RAM BHAROSEY LAL" },
-  { sn:61, name:"SUSHMA DEVI", father:"SHRI PYARE LAL" },
-  { sn:62, name:"SWATI", father:"RAJVIR SINGH" },
-  { sn:63, name:"SWETA SHARMA", father:"UMESH KUMAR SHARMA" },
-  { sn:64, name:"TASKEEN FATMA", father:"IBNE ABBAS" },
-  { sn:65, name:"TEHBA KHAN", father:"HAMID KHAN" },
-  { sn:66, name:"USHA ARYA", father:"RAM KUMAR SINGH" },
-  { sn:67, name:"VIDUSHI VARSHNEY", father:"HARINANDAN" },
-  { sn:68, name:"VIJAY BHARTI", father:"CHUNNI LAL" },
-  { sn:69, name:"ZEENAT FATIMA", father:"BABU HUSAIN" }
-];
+  /*
+    To add a new category array, do it like this:
+
+    library: [
+      { sn:1, name:"...", gender:"S/o", father:"...", dob:"...", aadhar:"...",
+        designation:"...", subject:"...", plus2:0, grad:"...", postGrad:"...",
+        profI:"...", profII:"...", net:"...", experience:"...", initials:"XX" },
+      ...
+    ]
+
+    Then call: staff.library.forEach(p => grid.appendChild(buildCard(p)));
+    inside renderGrids() below, where grid = the new section's grid element.
+  */
+};
 
 function getInitials(name){
   return name.split(' ').filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
-}
-
-function buildStudentCard(person){
-  const card = document.createElement('div');
-  card.className = 'staff-card';
-  card.innerHTML = `
-    <div class="card-photo">
-      <div class="avatar-initials">${getInitials(person.name)}</div>
-      <span class="designation-badge">S.No. ${person.sn}</span>
-    </div>
-    <div class="card-body">
-      <div class="card-name">${person.name}</div>
-      <div class="card-subject">D.El.Ed Batch 2018</div>
-      <div class="card-dob">Father: ${person.father}</div>
-    </div>
-    <div class="card-footer">
-      <span></span>
-      <span class="view-hint">Student</span>
-    </div>
-  `;
-  return card;
 }
 
 function getTag(net){
@@ -737,6 +742,18 @@ function getTag(net){
   return 'other';
 }
 
+/*
+  ====================================================================
+  buildCard(person)
+  ====================================================================
+  This builds one staff card. Used by ALL categories — full-time,
+  part-time, and any new category you add. As long as your new
+  person objects have the same fields (name, subject, dob, initials,
+  designation, net), this function works for them automatically.
+
+  "category" field/badge has been removed from here entirely.
+  ====================================================================
+*/
 function buildCard(person){
   const tag = getTag(person.net);
   const isPrincipal = person.designation.toLowerCase().includes('principal');
@@ -768,13 +785,22 @@ function buildCard(person){
   return card;
 }
 
+/*
+  ====================================================================
+  renderGrids()
+  ====================================================================
+  Renders every category into its grid container.
+  TO ADD A NEW CATEGORY: add one more line here, e.g.
+
+    const libGrid = document.getElementById('grid-library-staff');
+    staff.library.forEach(p => libGrid.appendChild(buildCard(p)));
+  ====================================================================
+*/
 function renderGrids(){
   const ftGrid = document.getElementById('grid-full-time');
   const ptGrid = document.getElementById('grid-part-time');
   staff.fullTime.forEach(p => ftGrid.appendChild(buildCard(p)));
   staff.partTime.forEach(p => ptGrid.appendChild(buildCard(p)));
-  const dlGrid = document.getElementById('grid-deled-2018');
-  deled2018.forEach(p => dlGrid.appendChild(buildStudentCard(p)));
 }
 
 function mark(val){
@@ -788,9 +814,18 @@ function mark(val){
   return `<div class="mark-chip"><div class="val">${val}</div><div class="lbl">Degree</div></div>`;
 }
 
+/*
+  ====================================================================
+  openModal(person)
+  ====================================================================
+  Builds the profile modal. The "Category" tag (modal-tag blue) has
+  been removed — only Ph.D / NET / M.Phil tags remain (if applicable).
+  The "Category" row in Personal Details has also been removed.
+  ====================================================================
+*/
 function openModal(person){
   const tag = getTag(person.net);
-  let tagHtml = `<span class="modal-tag blue">${person.category}</span>`;
+  let tagHtml = '';
   if(tag === 'phd') tagHtml += '<span class="modal-tag green">Ph.D Holder</span>';
   if(tag === 'net') tagHtml += '<span class="modal-tag orange">UGC-NET</span>';
   if(tag === 'mphil') tagHtml += '<span class="modal-tag orange">M.Phil</span>';
@@ -812,7 +847,6 @@ function openModal(person){
       <div class="info-section-title">Personal Details</div>
       <div class="info-grid">
         <div class="info-row"><span class="info-label">Date of Birth</span><span class="info-value">${person.dob}</span></div>
-        <div class="info-row"><span class="info-label">Category</span><span class="info-value">${person.category}</span></div>
         <div class="info-row wide"><span class="info-label">Aadhar Card No.</span><span class="aadhar-row">${person.aadhar}</span></div>
       </div>
     </div>
@@ -851,12 +885,30 @@ document.getElementById('modalOverlay').addEventListener('click', e => {
 document.getElementById('modalClose').addEventListener('click', closeModalDirect);
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModalDirect(); });
 
+/*
+  ====================================================================
+  startTest()
+  ====================================================================
+  Placeholder for the "Test" button. Replace this with your real
+  logic, e.g.:
+    window.location.href = 'test.html';   // go to a separate page
+  or open a quiz modal, etc.
+  ====================================================================
+*/
+function startTest(){
+  alert('learn hear ');
+}
+
 /* ── NAV TABS / SCROLL TO SECTION ── */
 const navTabs = document.querySelectorAll('.nav-tab');
 const sections = {
   'full-time': document.getElementById('section-full-time'),
   'part-time': document.getElementById('section-part-time'),
-  'deled-2018': document.getElementById('section-deled-2018')
+  'cyber': document.getElementById('section-cyber')
+  /*
+    ADD NEW CATEGORY SECTIONS HERE TOO, e.g.:
+    'library-staff': document.getElementById('section-library-staff')
+  */
 };
 navTabs.forEach(tab => {
   tab.addEventListener('click', () => {
